@@ -1,0 +1,18 @@
+
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.mongodb:mongodb-driver-sync:4.3.0'
+    implementation 'io.vertx:vertx-core:4.1.4'
+}
+
+test {
+    useJUnitPlatform()
+}
