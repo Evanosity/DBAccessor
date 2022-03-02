@@ -22,26 +22,17 @@ public abstract class Entity {
 	protected DBService db;
 	protected Document raw;
 	private final Key key;
-	private final Set<String> projections;
+	private final Set<String> projections; //This can be null
 	
 	private final boolean isNew;
 	
-	//Normal constructor
-	protected Entity(DBService db, Document raw) {
-		this(db, raw, false, null);
-	}
-	
-	//new entity
-	protected Entity(DBService db, Document raw, boolean isNew) {
-		this(db, raw, true, null);
-	}
-	
-	//entity with projections. Here, it's implied that the entity is NOT new.
-	protected Entity(DBService db, Document raw, Set<String> projections) {
-		this(db, raw, false, projections);
-	}
-	
-	//internal constructor
+	/**
+	 * Internal constructor. This class can only be instantiated from {@link EntityService}
+	 * @param db
+	 * @param raw
+	 * @param isNew
+	 * @param projections
+	 */
 	protected Entity(DBService db, Document raw, boolean isNew, Set<String> projections) {
 		this.db = db;
 		this.raw = raw;

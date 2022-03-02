@@ -76,7 +76,11 @@ public class DBService extends DBWrapper{
 	public Key getKey(String type, String id) {
 		return new Key(type, id);
 	}
-	
+
+	public <T extends Entity> T createEntity(String type){
+		return entityService.buildEntity(new Document());
+	}
+
 	public Key generateKey(String type) {
 		
 		boolean resolved = false;
@@ -237,7 +241,7 @@ public class DBService extends DBWrapper{
 			MongoCollection<Document> col = db.getCollection(type);
 			
 			for(Document doc : col.find(session, filter)) 
-				result.add(entityService.buildEntity(new Key(type, doc.getObjectId("_id")), doc));
+				result.add(entityService.buildEntity(doc));
 		}
 		
 		return result;
@@ -255,7 +259,7 @@ public class DBService extends DBWrapper{
 		if(docs.size() != 1)
 			throw new IllegalStateException("cant have multiple docs with the same identifier. delete this project.");
 		
-		return entityService.buildEntity(key, docs.get(0));
+		return entityService.buildEntity(docs.get(0));
 	}
 
 	/**
@@ -295,7 +299,7 @@ public class DBService extends DBWrapper{
 		for(Document doc : rawList) {
 			Key key = new Key(type, doc.getObjectId("_id"));
 						
-			result.add(entityService.buildEntity(key, doc));
+			result.add(entityService.buildEntity(doc));
 		}
 		
 		return result;

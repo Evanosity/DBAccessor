@@ -18,24 +18,16 @@ public abstract class EntityService {
 		this.db = db;
 	}
 	
-	/**
-	 * Create a new entity
-	 * @param <T> the type of object we're creating
-	 * @param type the string of the object we're creating If T and Type don't match, that's cringe.
-	 * @return
-	 */
-	public <T extends Entity> T createEntity(String type) {
-		Key key = db.generateKey(type);
-		
-		return createEntityObject(key, new Document(), true, null);
+	protected <T extends Entity> T buildEntity(Document doc) {
+		return createEntityObject(doc, false, null);
+	}
+
+	protected <T extends Entity> T buildEntity(Document doc, boolean isNew){
+		return createEntityObject(doc, true, null);
 	}
 	
-	public <T extends Entity> T buildEntity(Key key, Document doc) {
-		return createEntityObject(key, doc, false, null);
-	}
-	
-	public <T extends Entity> T buildEntity(Key key, Document doc, Set<String> projections) {
-		return createEntityObject(key, doc, false, projections);
+	protected <T extends Entity> T buildEntity(Document doc, Set<String> projections) {
+		return createEntityObject(doc, false, projections);
 	}
 
 	/**
@@ -46,5 +38,5 @@ public abstract class EntityService {
 	 * @param <T extends Entity> - the object type we're creating.
 	 * @return the entity.
 	 */
-	protected abstract <T extends Entity> T createEntityObject(Key key, Document doc, Boolean isNew, Set<String> projections);
+	protected abstract <T extends Entity> T createEntityObject(Document doc, Boolean isNew, Set<String> projections);
 }
