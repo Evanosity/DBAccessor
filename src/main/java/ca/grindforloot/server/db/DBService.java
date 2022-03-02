@@ -78,7 +78,7 @@ public class DBService extends DBWrapper{
 	}
 
 	public <T extends Entity> T createEntity(String type){
-		return entityService.buildEntity(new Document());
+		return entityService.buildEntity(type, new Document());
 	}
 
 	public Key generateKey(String type) {
@@ -224,8 +224,8 @@ public class DBService extends DBWrapper{
 	 * @param keys
 	 * @return
 	 */
-	public List<Entity> getEntities(Iterable<Key> keys){
-		List<Entity> result = new ArrayList<>();
+	public <T extends Entity> List<T> getEntities(Iterable<Key> keys){
+		List<T> result = new ArrayList<>();
 		
 		Map<String, List<Key>> sorted = sortKeysByType(keys);
 		
@@ -241,7 +241,7 @@ public class DBService extends DBWrapper{
 			MongoCollection<Document> col = db.getCollection(type);
 			
 			for(Document doc : col.find(session, filter)) 
-				result.add(entityService.buildEntity(doc));
+				result.add(entityService.buildEntity(type, doc));
 		}
 		
 		return result;
@@ -259,7 +259,7 @@ public class DBService extends DBWrapper{
 		if(docs.size() != 1)
 			throw new IllegalStateException("cant have multiple docs with the same identifier. delete this project.");
 		
-		return entityService.buildEntity(docs.get(0));
+		return entityService.buildEntity(key.getType(), docs.get(0));
 	}
 
 	/**
@@ -297,9 +297,7 @@ public class DBService extends DBWrapper{
 		List<T> result = new ArrayList<>();
 		
 		for(Document doc : rawList) {
-			Key key = new Key(type, doc.getObjectId("_id"));
-						
-			result.add(entityService.buildEntity(doc));
+			result.add(entityService.buildEntity(type, doc));
 		}
 		
 		return result;
@@ -399,7 +397,8 @@ public class DBService extends DBWrapper{
 	}
 	
 	/**
-	 * Sorts a list of entities into a map of type-list<entity>
+	 * Sorts a list of entities into a map of string->list->entity
+	 * TODO consider exposing this method (if needed)
 	 * @param ents
 	 * @return
 	 */
