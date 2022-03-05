@@ -12,22 +12,16 @@ import org.bson.Document;
  */
 public abstract class EntityService {
 	
-	public DBService db;
-	
-	public EntityService(DBService db) {
-		this.db = db;
-	}
-	
-	protected <T extends Entity> T buildEntity(final String type, Document doc) {
-		return createEntityObject(type, doc, false, null);
+	protected <T extends Entity> T buildEntity(final DBService db, final String type, Document doc) {
+		return createEntityObject(db, type, doc, false, null);
 	}
 
-	protected <T extends Entity> T buildEntity(final String type, Document doc, boolean isNew){
-		return createEntityObject(type, doc, true, null);
+	protected <T extends Entity> T buildEntity(final DBService db, final String type, Document doc, boolean isNew){
+		return createEntityObject(db, type, doc, true, null);
 	}
 	
-	protected <T extends Entity> T buildEntity(final String type, Document doc, Set<String> projections) {
-		return createEntityObject(type, doc, false, projections);
+	protected <T extends Entity> T buildEntity(final DBService db, final String type, Document doc, Set<String> projections) {
+		return createEntityObject(db, type, doc, false, projections);
 	}
 
 	/**
@@ -38,5 +32,5 @@ public abstract class EntityService {
 	 * @param <T extends Entity> - the object type we're creating.
 	 * @return the entity.
 	 */
-	protected abstract <T extends Entity> T createEntityObject(final String type, Document doc, Boolean isNew, Set<String> projections);
+	protected abstract <T extends Entity> T createEntityObject(final DBService db, final String type, Document doc, Boolean isNew, Set<String> projections);
 }

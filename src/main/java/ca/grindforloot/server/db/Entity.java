@@ -1,6 +1,6 @@
 package ca.grindforloot.server.db;
 
-import java.util.List;
+import java.util.Date;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -19,7 +19,7 @@ import io.vertx.core.json.JsonObject;
  * @author Evan
  *
  */
-public abstract class Entity {
+public abstract class Entity implements Cloneable {
 	protected DBService db;
 	protected Document raw;
 	private final Key key;
@@ -28,7 +28,7 @@ public abstract class Entity {
 	private final boolean isNew;
 	
 	/**
-	 * Internal constructor. This class can only be instantiated from {@link EntityService}
+	 * Internal constructor
 	 * @param db
 	 * @param raw
 	 * @param isNew
@@ -81,6 +81,12 @@ public abstract class Entity {
 	protected Object getValue(String key) {
 		return raw.get(key);
 	}
+	protected String getStringValue(String key){
+		return (String) getValue(key);
+	}
+	protected Date getDateValue(String key){
+		return (Date) getValue(key);
+	}
 	
 	protected void setValue(String key, Object value) {
 		raw.put(key, BsonService.parseValue(value));
@@ -97,6 +103,9 @@ public abstract class Entity {
 	
 	protected Key getKeyValue(String property) {
 		Document rawKey = (Document) getValue(property);
+
+		if(rawKey == null)
+			return null;
 		
 		return new Key(rawKey);
 	}
@@ -119,6 +128,23 @@ public abstract class Entity {
 	public String getId() {
 		return getKey().getId();
 	}
+
+	/**
+	 * Creates a perfect copy of this entity, with a unique key.
+	 * @return the cloned entity
+	 */
+	@Override
+	public Entity clone(){
+		Entity result = db.createEntity(getType());
+
+		for(Entry<String, Object> entry : raw.entrySet()) {
+			if(entry.getKey().equals("_id")) continue; //dont copy the ID
+			result.setValue(entry.getKey(), entry.getValue());
+		}
+
+		return result;
+	}
+
 	
 	/**
 	 * Create a Vert.x JsonObject representation of this entity

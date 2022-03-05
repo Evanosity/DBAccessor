@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
+
+
 import com.mongodb.client.model.Filters;
 
 
@@ -78,7 +81,7 @@ public class DBService extends DBWrapper{
 	}
 
 	public <T extends Entity> T createEntity(String type){
-		return entityService.buildEntity(type, new Document());
+		return entityService.buildEntity(this, type, new Document(), true);
 	}
 
 	public Key generateKey(String type) {
@@ -147,6 +150,8 @@ public class DBService extends DBWrapper{
 			//TODO log that we can't save projected entities.
 			return;
 		}
+
+		System.out.println("SAVING ENTITY" + ent.getId());
 		
 		if(ent.isNew())
 			col.insertOne(session, ent.raw);
@@ -241,7 +246,7 @@ public class DBService extends DBWrapper{
 			MongoCollection<Document> col = db.getCollection(type);
 			
 			for(Document doc : col.find(session, filter)) 
-				result.add(entityService.buildEntity(type, doc));
+				result.add(entityService.buildEntity(this, type, doc));
 		}
 		
 		return result;
@@ -259,7 +264,7 @@ public class DBService extends DBWrapper{
 		if(docs.size() != 1)
 			throw new IllegalStateException("cant have multiple docs with the same identifier. delete this project.");
 		
-		return entityService.buildEntity(key.getType(), docs.get(0));
+		return entityService.buildEntity(this, key.getType(), docs.get(0));
 	}
 
 	/**
@@ -297,16 +302,16 @@ public class DBService extends DBWrapper{
 		List<T> result = new ArrayList<>();
 		
 		for(Document doc : rawList) {
-			result.add(entityService.buildEntity(type, doc));
+			result.add(entityService.buildEntity(this, type, doc));
 		}
 		
 		return result;
 	}
 
-	public <T extends Entity> List<T> runEntityQuery(Query q){
-		Bson filter = BsonService.generateCompositeFilter(q.filters);
 
-		return fetchInternal(q.getType(), filter, q.projections);
+
+	private List<Document> fetchRawInternal(String collection, Bson filter, Bson projections){
+		return fetchRawInternal(collection, filter, projections, Integer.MAX_VALUE); //this might be unwise
 	}
 	
 	/**
@@ -316,13 +321,17 @@ public class DBService extends DBWrapper{
 	 * @param projections - the composed Bson projections
 	 * @return
 	 */
-	private List<Document> fetchRawInternal(String collection, Bson filter, Bson projections) {
+	private List<Document> fetchRawInternal(String collection, Bson filter, Bson projections, int limit) {
 		List<Document> result = new ArrayList<>();
 
-		FindIterable<Document> dbResult = db.getCollection(collection).find(filter).projection(projections);
+		MongoCollection<Document> col = db.getCollection(collection);
 
-		for (Document doc : dbResult)
-			result.add(doc);
+		//I think this is better???
+		try(MongoCursor<Document> test = col.find(filter).projection(projections).limit(limit).iterator()){
+			while(test.hasNext()){
+				result.add(test.next());
+			}
+		}
 
 		return result;
 	}
@@ -330,6 +339,12 @@ public class DBService extends DBWrapper{
 	/**
 	 * queries
 	 */
+	public <T extends Entity> List<T> runEntityQuery(Query q){
+		Bson filter = BsonService.generateCompositeFilter(q.filters);
+
+		return fetchInternal(q.getType(), filter, q.projections);
+	}
+
 	public void runDeleteQuery(Query q) {
 		Bson filter = BsonService.generateCompositeFilter(q.filters);
 

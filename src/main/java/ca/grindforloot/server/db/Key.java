@@ -25,6 +25,7 @@ public class Key {
 	protected Key(String type, ObjectId id) {
 		this.type = type;
 		this.id = id.toHexString();
+
 	}
 	
 	/**

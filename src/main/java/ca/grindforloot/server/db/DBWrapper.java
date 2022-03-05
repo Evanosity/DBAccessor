@@ -35,6 +35,17 @@ public abstract class DBWrapper {
      * @return
      */
     public boolean doTransaction(Runnable action) {
+
+        try{
+            action.run();
+            return true;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        /*
         //TODO consider transactionOptions
         return session.withTransaction(() -> {
             try {
@@ -45,6 +56,6 @@ public abstract class DBWrapper {
             catch(Exception e) {
                 return false;
             }
-        });
+        });*/
     }
 }
