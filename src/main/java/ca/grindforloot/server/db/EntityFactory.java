@@ -1,6 +1,8 @@
 package ca.grindforloot.server.db;
 
 import java.util.Set;
+
+import ca.grindforloot.classpool.ClassPool;
 import org.bson.Document;
 
 /**
@@ -10,7 +12,13 @@ import org.bson.Document;
  * @author Evan
  *
  */
-public abstract class EntityService {
+public class EntityFactory {
+
+	private final ClassPool<? extends Entity> pool;
+
+	public EntityFactory(String path){
+		pool = new ClassPool<>(path, Entity.class);
+	}
 	
 	protected <T extends Entity> T buildEntity(final DBService db, final String type, Document doc) {
 		return createEntityObject(db, type, doc, false, null);
@@ -25,12 +33,15 @@ public abstract class EntityService {
 	}
 
 	/**
-	 *
-	 * @param key - this is necessary to
 	 * @param isNew - if this is a fresh entity
 	 * @param projections - any projections on this entity.
 	 * @param <T extends Entity> - the object type we're creating.
 	 * @return the entity.
 	 */
-	protected abstract <T extends Entity> T createEntityObject(final DBService db, final String type, Document doc, Boolean isNew, Set<String> projections);
+	protected <T extends Entity> T createEntityObject(final DBService db, final String type, Document doc, Boolean isNew, Set<String> projections){
+		T raw = (T) pool.get(type);
+		T result = raw.instantiate();
+		result.init(db, doc, isNew, projections);
+		return result;
+	}
 }

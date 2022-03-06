@@ -22,10 +22,12 @@ import io.vertx.core.json.JsonObject;
 public abstract class Entity implements Cloneable {
 	protected DBService db;
 	protected Document raw;
-	private final Key key;
-	private final Set<String> projections; //This can be null
+	private Key key;
+	private Set<String> projections; //This can be null
 	
-	private final boolean isNew;
+	private Boolean isNew;
+
+	protected Entity(){};
 	
 	/**
 	 * Internal constructor
@@ -34,7 +36,7 @@ public abstract class Entity implements Cloneable {
 	 * @param isNew
 	 * @param projections
 	 */
-	protected Entity(DBService db, Document raw, boolean isNew, Set<String> projections) {
+	protected void init(DBService db, Document raw, boolean isNew, Set<String> projections) {
 		this.db = db;
 		this.raw = raw;
 		this.isNew = isNew;
@@ -57,6 +59,8 @@ public abstract class Entity implements Cloneable {
 	 * @return
 	 */
 	public abstract String getType();
+
+	protected abstract <T extends Entity> T instantiate();
 	
 	public boolean isNew() {
 		return isNew;

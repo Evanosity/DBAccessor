@@ -8,10 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
+import com.mongodb.client.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -23,27 +20,63 @@ import com.mongodb.client.model.Filters;
 /**
  * The main point of access to MongoDB
  * My goal is to not expose the MongoDB api outside of this package.
- * 
- * See {@link EntityService} for the generation of entity objects.
+ *
+ * See {@link EntityFactory} for the generation of entity objects.
  * 
  * @author Evan
  *
  * TODO consider caching the collections we've called?
  *
  */
-public class DBService extends DBWrapper{
-	private final EntityService entityService;
+public class DBService{
+	private final EntityFactory entityService;
+	private final MongoClient client;
+	protected final MongoDatabase db;
+	protected final ClientSession session;
 
-	public DBService(MongoClient client, EntityService cs) {
-		super(client);
-		
+	public DBService(MongoClient client, EntityFactory cs) {
 		entityService = cs;
+		this.client = client;
+		session = client.startSession();
+		db = client.getDatabase(getDBName());
+
 	}
 
-	@Override
 	//TODO this is probably an environment variable
 	protected String getDBName() {
 		return "gfl-test";
+	}
+
+	/**
+	 * Perform an action inside of a mongodb transaction.
+	 * This isn't ThreadSafe
+	 *
+	 * @param action - what is being run inside the script context
+	 * @return
+	 */
+	public boolean doTransaction(Runnable action) {
+
+		try{
+			action.run();
+			return true;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+
+        /*
+        //TODO consider transactionOptions
+        return session.withTransaction(() -> {
+            try {
+                action.run();
+                return true;
+            }
+            //if any error occurs, we simply report back. Might be worth throwing E instead? TODO
+            catch(Exception e) {
+                return false;
+            }
+        });*/
 	}
 
 	public Long test(){
