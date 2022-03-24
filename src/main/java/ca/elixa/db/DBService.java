@@ -1,4 +1,4 @@
-package ca.grindforloot.server.db;
+package ca.elixa.db;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +13,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-
 import com.mongodb.client.model.Filters;
 
 
@@ -26,6 +25,8 @@ import com.mongodb.client.model.Filters;
  * @author Evan
  *
  * TODO consider caching the collections we've called?
+ *
+ * TODO make this abstract. Remove entityfactory and implement its functionality in here as an abstract method.
  *
  */
 public class DBService{
@@ -56,14 +57,18 @@ public class DBService{
 	 */
 	public boolean doTransaction(Runnable action) {
 
-		try{
-			action.run();
-			return true;
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
+		action.run();
+
+		return true;
+
+
+		//try{
+		//	return true;
+		//}
+		//catch(Exception e){
+		//	e.printStackTrace();
+		//	return false;
+		//}
 
         /*
         //TODO consider transactionOptions

@@ -1,4 +1,4 @@
-package ca.grindforloot.server.db;
+package ca.elixa.db;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;

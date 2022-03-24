@@ -1,6 +1,5 @@
-package ca.grindforloot.server.db;
+package ca.elixa.db;
 
-import ca.grindforloot.server.Pair;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;

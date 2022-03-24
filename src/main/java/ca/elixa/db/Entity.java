@@ -1,10 +1,11 @@
-package ca.grindforloot.server.db;
+package ca.elixa.db;
 
 import java.util.Date;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bson.Document;
+import org.bson.types.Binary;
 import org.bson.types.ObjectId;
 
 import io.vertx.core.json.JsonObject;
@@ -90,6 +91,26 @@ public abstract class Entity implements Cloneable {
 	}
 	protected Date getDateValue(String key){
 		return (Date) getValue(key);
+	}
+
+	/**
+	 *
+	 * @param key
+	 * @return an empty array if the value is null
+	 */
+	protected byte[] getBinaryValue(String key) {
+		Object value = getValue(key);
+		if(value == null)
+			return new byte[0];
+		return ((Binary) value).getData();
+	}
+	protected ObjectId getObjectIdValue(String key){
+		return (ObjectId) getValue(key);
+	}
+	protected <T extends Entity> T getEntityFromKeyValue(String key){
+		Key k = getKeyValue(key);
+
+		return db.getEntity(k);
 	}
 	
 	protected void setValue(String key, Object value) {

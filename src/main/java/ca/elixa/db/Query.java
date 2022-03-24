@@ -1,12 +1,11 @@
-package ca.grindforloot.server.db;
+package ca.elixa.db;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ca.grindforloot.server.db.BsonService.FilterOperator;
-import ca.grindforloot.server.Pair;
+import ca.elixa.db.BsonService.FilterOperator;
 
 /**
  * This stores information about a query before it is executed. A logical building block in efficient queries

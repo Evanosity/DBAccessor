@@ -1,8 +1,8 @@
-package ca.grindforloot.server.db;
+package ca.elixa.db;
 
 import java.util.Set;
 
-import ca.grindforloot.classpool.ClassPool;
+import ca.elixa.classpool.ClassPool;
 import org.bson.Document;
 
 /**
