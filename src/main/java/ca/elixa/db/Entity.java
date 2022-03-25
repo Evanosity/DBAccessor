@@ -119,11 +119,13 @@ public abstract class Entity implements Cloneable {
 	
 	/**
 	 * Embeds a key onto an entity
-	 * @param property
 	 * @param key
 	 */
-	protected void setKeyValue(String property, Key key) {
-		setValue(property, key);
+	protected void setKeyValue(String key, Key value) {
+		setValue(key, value);
+	}
+	protected void setBinaryValue(String key, byte[] value){
+		setValue(key, new Binary(value));
 	}
 	
 	protected Key getKeyValue(String property) {
