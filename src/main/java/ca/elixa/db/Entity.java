@@ -113,7 +113,7 @@ public abstract class Entity implements Cloneable {
 		return db.getEntity(k);
 	}
 	
-	protected void setValue(String key, Object value) {
+	public void setValue(String key, Object value) {
 		raw.put(key, BsonService.parseValue(value));
 	}
 	
