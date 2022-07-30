@@ -2,8 +2,6 @@ package ca.elixa.db;
 
 import java.util.List;
 
-import ca.elixa.db.BsonService.FilterOperator;
-
 /**
  * Helper methods for querying entities.
  *

@@ -17,10 +17,6 @@ import java.util.Set;
  */
 public class BsonService {
 
-    public enum FilterOperator {
-        EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL
-    }
-
     /**
      * Generates a Bson filter for a singular ID.
      * @param id

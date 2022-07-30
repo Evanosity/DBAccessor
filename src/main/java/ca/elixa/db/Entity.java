@@ -83,10 +83,10 @@ public abstract class Entity implements Cloneable {
 		return raw.getString("name");
 	}
 	
-	protected Object getValue(String key) {
+	public Object getValue(String key) {
 		return raw.get(key);
 	}
-	protected String getStringValue(String key){
+	public String getStringValue(String key){
 		return (String) getValue(key);
 	}
 	protected Date getDateValue(String key){

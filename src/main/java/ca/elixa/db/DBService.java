@@ -298,6 +298,9 @@ public class DBService{
 	public <T extends Entity> T getEntity(Key key) {
 		
 		List<Document> docs = fetchRawInternal(key.getType(), BsonService.getFilterForId(key.getId()), null);
+
+		if(docs.size() == 0)
+			return null;
 		
 		if(docs.size() != 1)
 			throw new IllegalStateException("cant have multiple docs with the same identifier. delete this project.");

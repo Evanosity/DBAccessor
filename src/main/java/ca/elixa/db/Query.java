@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ca.elixa.db.BsonService.FilterOperator;
-
 /**
  * This stores information about a query before it is executed. A logical building block in efficient queries
  * @author Evan
@@ -68,6 +66,10 @@ public class Query {
 		projections.remove(propertyName);
 		
 		return this;
+	}
+
+	public Set<String> getProjections(){
+		return projections;
 	}
 	
 	/**
