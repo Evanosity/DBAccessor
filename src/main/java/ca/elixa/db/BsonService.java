@@ -3,6 +3,7 @@ package ca.elixa.db;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
+import io.vertx.core.json.JsonObject;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -130,5 +131,22 @@ public class BsonService {
 
         //otherwise, we simply return the object untouched.
         return obj;
+    }
+
+    public static Document jsonToDoc(JsonObject json){
+        Document doc = new Document();
+
+        for(var entry : json.getMap().entrySet())
+            doc.put(entry.getKey(), entry.getValue());
+
+        return doc;
+    }
+    public static JsonObject docToJson(Document doc){
+        JsonObject json = new JsonObject();
+
+        for(var entry : doc.entrySet())
+            json.put(entry.getKey(), entry.getValue());
+
+        return json;
     }
 }
