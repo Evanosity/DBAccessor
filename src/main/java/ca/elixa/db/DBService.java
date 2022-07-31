@@ -114,6 +114,23 @@ public class DBService{
 		if(!test) System.out.println("a whoopsie has happened");
 	}
 
+	public Key getKeyFromString(String raw){
+		int open = raw.indexOf("(");
+		int close = raw.indexOf(")");
+
+		if(open < 1 || close < 1)
+			return null;
+
+		String type = raw.substring(0, open);
+		String id = raw.substring(open + 1, close);
+
+		return getKey(type, id);
+	}
+
+	public Key getKeyFromDoc(Document doc){
+		return new Key(doc);
+	}
+
 	public Key getKey(String type, String id) {
 		return new Key(type, id);
 	}

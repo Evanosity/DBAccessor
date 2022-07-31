@@ -47,4 +47,9 @@ public class Key {
 	public String getId() {
 		return id;
 	}
+
+	@Override
+	public String toString(){
+		return type + "(" + id + ")";
+	}
 }
