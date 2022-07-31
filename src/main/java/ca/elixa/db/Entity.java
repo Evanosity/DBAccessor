@@ -151,6 +151,10 @@ public abstract class Entity implements Cloneable {
 	public Key getKey() {
 		return key;
 	}
+
+	public String getKeyString(){
+		return getKey().toString();
+	}
 	
 	public String getId() {
 		return getKey().getId();
