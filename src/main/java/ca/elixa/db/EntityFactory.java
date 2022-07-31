@@ -14,7 +14,7 @@ import org.bson.Document;
  */
 public class EntityFactory {
 
-	private final ClassPool<? extends Entity> pool;
+	public final ClassPool<? extends Entity> pool;
 
 	public EntityFactory(String path){
 		pool = new ClassPool<>(path, Entity.class);

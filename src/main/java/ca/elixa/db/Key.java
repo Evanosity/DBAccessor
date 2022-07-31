@@ -52,4 +52,14 @@ public class Key {
 	public String toString(){
 		return type + "(" + id + ")";
 	}
+
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Key){
+			Key newKey = ((Key) o);
+
+			return newKey.getId().equals(getId()) && newKey.getType().equals(getType());
+		}
+		return false;
+	}
 }
