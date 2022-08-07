@@ -64,6 +64,9 @@ public class BsonService {
      */
     protected static Bson generateCompositeFilter(Map<String, Pair<FilterOperator, Object>> filters) {
 
+        if(filters.size() == 0)
+            filters.put("__", new Pair<>(FilterOperator.EQUAL, null));
+
         List<Bson> builtFilters = new ArrayList<>();
 
         for(Map.Entry<String, Pair<FilterOperator, Object>> entry : filters.entrySet()) {

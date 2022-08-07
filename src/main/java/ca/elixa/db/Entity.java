@@ -1,10 +1,8 @@
 package ca.elixa.db;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.function.Consumer;
 
 import org.bson.Document;
 import org.bson.types.Binary;
@@ -134,6 +132,14 @@ public abstract class Entity implements Cloneable {
 		return (Date) getValue(key);
 	}
 
+	protected Long getLongValue(String key){
+		return raw.getLong(key);
+	}
+
+	protected Double getDoubleValue(String key){
+		return raw.getDouble(key);
+	}
+
 	/**
 	 *
 	 * @param key
@@ -199,6 +205,15 @@ public abstract class Entity implements Cloneable {
 	
 	public String getId() {
 		return getKey().getId();
+	}
+
+	/**
+	 * Do not allow direct access to the raw underlying document.
+	 *
+	 * INSTEAD, allow them to iterate over an unmodifiable version of the document
+	 */
+	public void iterateOverAllProperties(Consumer<? super Entry<String, Object>> transformation){
+		Collections.unmodifiableCollection(raw.entrySet()).forEach(transformation);
 	}
 
 	/**

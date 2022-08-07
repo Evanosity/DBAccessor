@@ -3,7 +3,7 @@ package ca.elixa.db;
 public enum DataType {
     String,  Curve,
 
-    Number,
+    Number, Decimal,
 
     Key, KeyList,
 }
