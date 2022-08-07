@@ -1,6 +1,8 @@
 package ca.elixa.db;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -81,6 +83,45 @@ public abstract class Entity implements Cloneable {
 	
 	public String getName() {
 		return raw.getString("name");
+	}
+
+	/**
+	 * Given a List of Keys on an entity, fetch those entities.
+	 * @param key
+	 * @return
+	 * @param <T>
+	 */
+	public <T extends Entity> List<T> getReferencedEntityList(String key){
+		List<Key> keys = getKeyList(key);
+
+		return db.getEntities(keys);
+	}
+
+	/**
+	 * Get a list of keys
+	 * @param key
+	 * @return
+	 */
+	public List<Key> getKeyList(String key){
+		List<Document> documents = getListValue(key, Document.class);
+
+		List<Key> results = new ArrayList<>();
+
+		for(Document doc : documents)
+			results.add(db.getKeyFromDoc(doc));
+
+		return results;
+	}
+
+	/**
+	 * Get a list of T off of the entity
+	 * @param key
+	 * @param type
+	 * @return
+	 * @param <T>
+	 */
+	protected <T> List<T> getListValue(String key, Class<T> type){
+		return raw.getList(key, type);
 	}
 	
 	public Object getValue(String key) {

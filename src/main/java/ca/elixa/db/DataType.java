@@ -1,5 +1,9 @@
 package ca.elixa.db;
 
 public enum DataType {
-    String, Key, KeyList, Curve
+    String,  Curve,
+
+    Number,
+
+    Key, KeyList,
 }
