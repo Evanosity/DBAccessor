@@ -8,7 +8,6 @@ import org.bson.types.ObjectId;
  * @author Evan
  * 
  * TODO consider if we want a method to encode the entire key
- * TODO look into why im storing the ID as a string; is that correct?
  *
  */
 public class Key {

@@ -3,6 +3,7 @@ package ca.elixa.db;
 import java.util.Set;
 
 import ca.elixa.classpool.ClassPool;
+import ca.elixa.classpool.GroupedClassPool;
 import org.bson.Document;
 
 /**
@@ -18,6 +19,18 @@ public class EntityFactory {
 
 	public EntityFactory(String path){
 		pool = new ClassPool<>(path, Entity.class);
+	}
+
+	public EntityFactory(String... paths){
+
+		GroupedClassPool<Entity> gPool = new GroupedClassPool<>(Entity.class);
+
+		for(String path : paths){
+			ClassPool<Entity> p = new ClassPool<>(path, Entity.class);
+			gPool.addPool(p);
+		}
+
+		pool = gPool;
 	}
 	
 	protected <T extends Entity> T buildEntity(final DBService db, final String type, Document doc) {

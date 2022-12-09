@@ -56,8 +56,7 @@ public abstract class Entity implements Cloneable {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * TODO consider reflectively grabbing this?
 	 */
 	public abstract String getType();
 
@@ -96,12 +95,16 @@ public abstract class Entity implements Cloneable {
 	}
 
 	/**
-	 * Get a list of keys
+	 * Get a list of keys. Can be empty.
 	 * @param key
 	 * @return
 	 */
 	public List<Key> getKeyList(String key){
 		List<Document> documents = getListValue(key, Document.class);
+
+		if(documents == null || documents.size() == 0){
+			return new ArrayList<>();
+		}
 
 		List<Key> results = new ArrayList<>();
 
