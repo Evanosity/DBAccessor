@@ -61,7 +61,6 @@ public class DBService{
 
 		return true;
 
-
 		//try{
 		//	return true;
 		//}
@@ -70,7 +69,7 @@ public class DBService{
 		//	return false;
 		//}
 
-        /*
+		/*
         //TODO consider transactionOptions
         return session.withTransaction(() -> {
             try {
@@ -81,7 +80,9 @@ public class DBService{
             catch(Exception e) {
                 return false;
             }
-        });*/
+        });
+
+		 */
 	}
 
 	public Long test(){
@@ -181,15 +182,27 @@ public class DBService{
 	 * Insert a list of entities into the database
 	 * @param ents
 	 */
-	public void put(Iterable<Entity> ents) {
-		Map<String, List<Entity>> sorted = sortEntitiesByType(ents);
+	public <T extends Entity> void put(Iterable<T> ents) {
+		Map<String, List<T>> sorted = sortEntitiesByType(ents);
 		
-		for(Entry<String, List<Entity>> entry : sorted.entrySet()) {
+		for(Entry<String, List<T>> entry : sorted.entrySet()) {
 			MongoCollection<Document> col = db.getCollection(entry.getKey());
 						
 			for(Entity ent : entry.getValue())
 				putInternal(ent, col);
 		}
+	}
+
+	private boolean bulkPutMode = false;
+	private List<Entity> pending = null;
+	public void startBulkPutMode(){
+		bulkPutMode = true;
+	}
+
+	public void bulkCommit(){
+		bulkPutMode = false;
+		put(pending);
+		pending = null;
 	}
 	
 	/**
@@ -198,6 +211,16 @@ public class DBService{
 	 * @param col - the MongoCollection we're putting this document to
 	 */
 	private void putInternal(Entity ent, MongoCollection<Document> col) {
+
+		if(bulkPutMode) {
+			if (pending == null)
+				pending = new ArrayList<>();
+
+			pending.add(ent);
+
+			return;
+		}
+
 		
 		//TODO consider a put event handler
 		
@@ -206,7 +229,7 @@ public class DBService{
 			return;
 		}
 
-		System.out.println("SAVING ENTITY" + ent.getId());
+		System.out.println("SAVING ENTITY " + ent.getId() + " of type " + ent.getType() + " of name " + ent.getName());
 		
 		if(ent.isNew())
 			col.insertOne(session, ent.raw);
@@ -475,13 +498,13 @@ public class DBService{
 	 * @param ents
 	 * @return
 	 */
-	private Map<String, List<Entity>> sortEntitiesByType(Iterable<Entity> ents){
-		Map<String, List<Entity>> result = new HashMap<>();
+	private <T extends Entity> Map<String, List<T>> sortEntitiesByType(Iterable<T> ents){
+		Map<String, List<T>> result = new HashMap<>();
 		
-		for(Entity ent : ents) {
+		for(T ent : ents) {
 			String type = ent.getType();
 			
-			List<Entity> current = result.get(type);
+			List<T> current = result.get(type);
 			if(current == null) current = new ArrayList<>();
 			
 			current.add(ent);
