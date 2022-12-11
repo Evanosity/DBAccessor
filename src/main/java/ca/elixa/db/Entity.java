@@ -114,6 +114,17 @@ public abstract class Entity implements Cloneable {
 		return results;
 	}
 
+	public void addKeyToList(String targetKey, Entity toAdd){
+		addKeyToList(targetKey, toAdd.getKey());
+	}
+
+	public void addKeyToList(String targetKey, Key toAdd){
+		List<Key> current = getKeyList(targetKey);
+		current.add(toAdd);
+
+		setValue(targetKey, current);
+	}
+
 	/**
 	 * Get a list of T off of the entity
 	 * @param key
@@ -159,6 +170,9 @@ public abstract class Entity implements Cloneable {
 	}
 	protected <T extends Entity> T getEntityFromKeyValue(String key){
 		Key k = getKeyValue(key);
+
+		if(k == null)
+			return null;
 
 		return db.getEntity(k);
 	}
