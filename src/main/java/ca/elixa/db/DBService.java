@@ -309,9 +309,9 @@ public class DBService{
 	 */
 	public <T extends Entity> List<T> getEntities(Iterable<Key> keys){
 		List<T> result = new ArrayList<>();
-		
+
 		Map<String, List<Key>> sorted = sortKeysByType(keys);
-		
+
 		for(Entry<String, List<Key>> entry : sorted.entrySet()) {
 			String type = entry.getKey();
 			List<ObjectId> ids = new ArrayList<>();
@@ -323,8 +323,9 @@ public class DBService{
 			
 			MongoCollection<Document> col = db.getCollection(type);
 			
-			for(Document doc : col.find(session, filter)) 
+			for(Document doc : col.find(session, filter)) {
 				result.add(entityService.buildEntity(this, type, doc));
+			}
 		}
 		
 		return result;

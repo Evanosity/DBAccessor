@@ -151,7 +151,10 @@ public abstract class Entity implements Cloneable {
 	}
 
 	protected Double getDoubleValue(String key){
-		return raw.getDouble(key);
+		Double d = raw.getDouble(key);
+		if(d == null)
+			return 0d;
+		return d;
 	}
 
 	/**

@@ -54,8 +54,7 @@ public class Key {
 
 	@Override
 	public boolean equals(Object o){
-		if(o instanceof Key){
-			Key newKey = ((Key) o);
+		if(o instanceof Key newKey){
 
 			return newKey.getId().equals(getId()) && newKey.getType().equals(getType());
 		}
