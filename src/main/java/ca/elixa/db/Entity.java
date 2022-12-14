@@ -126,11 +126,11 @@ public abstract class Entity implements Cloneable {
 	}
 
 	/**
-	 * Get a list of T off of the entity
-	 * @param key
-	 * @param type
+	 * Get a list from this entity
+	 * @param key - the given property
+	 * @param type - the class of the resulting list type
 	 * @return
-	 * @param <T>
+	 * @param <T> - the type of list
 	 */
 	protected <T> List<T> getListValue(String key, Class<T> type){
 		return raw.getList(key, type);
@@ -157,6 +157,11 @@ public abstract class Entity implements Cloneable {
 		return d;
 	}
 
+	/**
+	 * Get a string-object map from this entity
+	 * @param key - the given property
+	 * @return
+	 */
 	protected Map<String, Object> getMapValue(String key){
 		Document doc = getEmbedded(key);
 
@@ -168,12 +173,29 @@ public abstract class Entity implements Cloneable {
 		return result;
 	}
 
-	protected Map<String, String> getStringMapValue(String key){
-		Document embedded = raw.get(key, Document.class);
+	/**
+	 * Get a string-string map from this entity
+	 * @param key - the given property
+	 * @return
+	 */
+	protected Map<String, String> getStringStringMapValue(String key){
+		Document doc = raw.get(key, Document.class);
 
-		return null;
+		Map<String, String> result = new HashMap<>();
+
+		for(var entry : doc.entrySet())
+			result.put(entry.getKey(), entry.getValue().toString());
+
+		return result;
 	}
 
+	/**
+	 * Fetch a list of embedded entities on this entity.
+	 * @param key - the given property
+	 * @param type - string representation of the resulting entity type.
+	 * @return
+	 * @param <T> - the resulting entity type
+	 */
 	protected <T extends Entity> List<T> getEmbeddedEntityList(String key, String type){
 		List<Document> documents = getListValue(key, Document.class);
 		List<T> result = new ArrayList<>();
@@ -184,14 +206,31 @@ public abstract class Entity implements Cloneable {
 		return result;
 	}
 
+	/**
+	 * Fetch an embedded entity on this entity.
+	 * @param key - the given property
+	 * @param type - string representation of the resulting entity type.
+	 * @return
+	 * @param <T> - the resulting entity type
+	 */
 	protected <T extends Entity> T getEmbeddedEntity(String key, String type){
 		return db.entityService.buildEntity(db, type, getEmbedded(key));
 	}
 
+	/**
+	 * Get an embedded document on this entity.
+	 * @param key - the given property
+	 * @return
+	 */
 	private Document getEmbedded(String key){
 		return raw.get(key, Document.class);
 	}
 
+	/**
+	 * Sets a map value onto this entity
+	 * @param key - the given property
+	 * @param map - the map we are setting
+	 */
 	protected void setMapValue(String key, Map<String, Object> map){
 		Document d = new Document();
 
@@ -202,7 +241,7 @@ public abstract class Entity implements Cloneable {
 
 	/**
 	 *
-	 * @param key
+	 * @param key - the given property
 	 * @return an empty array if the value is null
 	 */
 	protected byte[] getBinaryValue(String key) {
@@ -211,9 +250,22 @@ public abstract class Entity implements Cloneable {
 			return new byte[0];
 		return ((Binary) value).getData();
 	}
+
+	/**
+	 * Get a Bson Object ID property on this entity
+	 * @param key - the given property
+	 * @return
+	 */
 	protected ObjectId getObjectIdValue(String key){
 		return (ObjectId) getValue(key);
 	}
+
+	/**
+	 * Fetches the entity associated with a key value on this entity
+	 * @param key - the property we are looking at
+	 * @return the entity
+	 * @param <T> - the resulting entity type
+	 */
 	protected <T extends Entity> T getEntityFromKeyValue(String key){
 		Key k = getKeyValue(key);
 
@@ -222,18 +274,21 @@ public abstract class Entity implements Cloneable {
 
 		return db.getEntity(k);
 	}
-	
+
+	/**
+	 * Set a value on this entity. It will format the given object accordingly; see @link{BsonService.parseValue}
+	 * @param key - the property we are setting
+	 * @param value - the new value
+	 */
 	public void setValue(String key, Object value) {
 		raw.put(key, BsonService.parseValue(value));
 	}
-	
+
 	/**
-	 * Embeds a key onto an entity
+	 * Set a binary value onto this entity. Please note that this is required given that byte arrays are primitive.
 	 * @param key
+	 * @param value
 	 */
-	protected void setKeyValue(String key, Key value) {
-		setValue(key, value);
-	}
 	protected void setBinaryValue(String key, byte[] value){
 		setValue(key, new Binary(value));
 	}
@@ -257,15 +312,24 @@ public abstract class Entity implements Cloneable {
 	public boolean hasValue(String key) {
 		return raw.containsKey(key);
 	}
-	
+
+	/**
+	 * @return the key associated with this entity.
+	 */
 	public Key getKey() {
 		return key;
 	}
 
+	/**
+	 * @return a formatted string representing the key associated with this entity. Same as calling .getKey().toString()
+	 */
 	public String getKeyString(){
 		return getKey().toString();
 	}
-	
+
+	/**
+	 * @return the ID associated with this entity's key.
+	 */
 	public String getId() {
 		return getKey().getId();
 	}
@@ -287,10 +351,12 @@ public abstract class Entity implements Cloneable {
 	public Entity clone(){
 		Entity result = db.createEntity(getType());
 
-		for(Entry<String, Object> entry : raw.entrySet()) {
-			if(entry.getKey().equals("_id")) continue; //dont copy the ID
+		iterateOverAllProperties(entry -> {
+			//dont copy over the ID
+			if(entry.getKey().equals("_id"))
+				return;
 			result.setValue(entry.getKey(), entry.getValue());
-		}
+		});
 
 		return result;
 	}
