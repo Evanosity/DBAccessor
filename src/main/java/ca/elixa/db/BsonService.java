@@ -118,10 +118,11 @@ public class BsonService {
      */
     protected static Object parseValue(Object obj) {
         //if this object is a key, we convert it to a document.
-        if(obj instanceof Key) {
-            Key key = (Key) obj;
+        if(obj instanceof Key key)
             return key.toDocument();
-        }
+        //if this object is an entity, we convert it to a document.
+        if(obj instanceof Entity ent)
+            return ent.raw;
         //if this object is a list, we iterate over it, parsing each time
         if(obj instanceof List){
             List<Object> list = new ArrayList<>();

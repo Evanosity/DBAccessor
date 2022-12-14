@@ -30,7 +30,7 @@ import com.mongodb.client.model.Filters;
  *
  */
 public class DBService{
-	private final EntityFactory entityService;
+	protected final EntityFactory entityService;
 	private final MongoClient client;
 	protected final MongoDatabase db;
 	protected final ClientSession session;

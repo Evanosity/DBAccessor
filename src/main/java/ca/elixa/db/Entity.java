@@ -157,6 +157,49 @@ public abstract class Entity implements Cloneable {
 		return d;
 	}
 
+	protected Map<String, Object> getMapValue(String key){
+		Document doc = getEmbedded(key);
+
+		Map<String, Object> result = new HashMap<>();
+
+		for(var entry : doc.entrySet())
+			result.put(entry.getKey(), entry.getValue());
+
+		return result;
+	}
+
+	protected Map<String, String> getStringMapValue(String key){
+		Document embedded = raw.get(key, Document.class);
+
+		return null;
+	}
+
+	protected <T extends Entity> List<T> getEmbeddedEntityList(String key, String type){
+		List<Document> documents = getListValue(key, Document.class);
+		List<T> result = new ArrayList<>();
+
+		for(Document doc : documents)
+			result.add(db.entityService.buildEntity(db, type, doc));
+		
+		return result;
+	}
+
+	protected <T extends Entity> T getEmbeddedEntity(String key, String type){
+		return db.entityService.buildEntity(db, type, getEmbedded(key));
+	}
+
+	private Document getEmbedded(String key){
+		return raw.get(key, Document.class);
+	}
+
+	protected void setMapValue(String key, Map<String, Object> map){
+		Document d = new Document();
+
+		d.putAll(map);
+
+		raw.put(key, d);
+	}
+
 	/**
 	 *
 	 * @param key
