@@ -183,6 +183,9 @@ public abstract class Entity implements Cloneable {
 
 		Map<String, String> result = new HashMap<>();
 
+		if(doc == null)
+			return result;
+
 		for(var entry : doc.entrySet())
 			result.put(entry.getKey(), entry.getValue().toString());
 
@@ -199,6 +202,9 @@ public abstract class Entity implements Cloneable {
 	protected <T extends Entity> List<T> getEmbeddedEntityList(String key, String type){
 		List<Document> documents = getListValue(key, Document.class);
 		List<T> result = new ArrayList<>();
+
+		if(documents == null)
+			return result;
 
 		for(Document doc : documents)
 			result.add(db.entityService.buildEntity(db, type, doc));
