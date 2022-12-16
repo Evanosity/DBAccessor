@@ -143,7 +143,7 @@ public abstract class Entity implements Cloneable {
 		return (String) getValue(key);
 	}
 	protected Date getDateValue(String key){
-		return (Date) getValue(key);
+		return raw.getDate(key);
 	}
 
 	protected Long getLongValue(String key){
