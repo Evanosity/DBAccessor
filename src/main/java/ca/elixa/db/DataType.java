@@ -7,5 +7,10 @@ public enum DataType {
 
     Key, KeyList,
 
-    Map
+
+
+    //TO IMPLEMENT PROPERLY
+    Map, Enum,
+
+    EmbeddedEntity, EmbeddedEntityList
 }

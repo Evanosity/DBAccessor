@@ -167,6 +167,9 @@ public abstract class Entity implements Cloneable {
 
 		Map<String, Object> result = new HashMap<>();
 
+		if(doc == null)
+			return result;
+
 		for(var entry : doc.entrySet())
 			result.put(entry.getKey(), entry.getValue());
 

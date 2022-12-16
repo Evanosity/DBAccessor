@@ -8,10 +8,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Static methods for composing Bson
@@ -131,6 +128,19 @@ public class BsonService {
                 list.add(parseValue(o));
 
             return list;
+        }
+        if(obj instanceof JsonObject jo){
+            return jsonToDoc(jo);
+        }
+        if(obj instanceof Map){
+            Map<String, ?> casted = (Map<String, ?>) obj;
+
+            Document doc = new Document();
+
+            for(var entry : casted.entrySet())
+                doc.put(entry.getKey(), entry.getValue());
+
+            return doc;
         }
 
         //otherwise, we simply return the object untouched.
