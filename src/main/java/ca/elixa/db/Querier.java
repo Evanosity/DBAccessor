@@ -1,5 +1,6 @@
 package ca.elixa.db;
 
+import java.nio.file.DirectoryStream;
 import java.util.List;
 
 /**
@@ -19,6 +20,10 @@ public class Querier {
 	public Querier(DBService db) {
 		this.db = db;
 	}
+
+	public <T extends Entity> List<T> fetchEntities(String type, String field, Object value){
+		return fetchEntities(type, field, FilterOperator.EQUAL, value);
+	}
 	
 	public <T extends Entity> List<T> fetchEntities(String type, String field, FilterOperator op, Object value){
 		
@@ -29,12 +34,25 @@ public class Querier {
 		
 		return result;
 	}
+
+	public <T extends Entity> List<T> fetchEntities(String type, String field, Object value,
+													String field2, Object value2){
+		return fetchEntities(type, field, FilterOperator.EQUAL, value, field2, FilterOperator.EQUAL, value2);
+	}
 	public <T extends Entity> List<T> fetchEntities(String type, String field, FilterOperator op, Object value,
 			String field2, FilterOperator op2, Object value2){
 		
 		getQuery(type).addFilter(field2, op2, value2);
 		
 		return fetchEntities(type, field, op, value);
+	}
+
+	public <T extends Entity> List<T> fetchEntities(String type, String field, Object value,
+													String field2, Object value2,
+													String field3, Object value3){
+		return fetchEntities(type, field, FilterOperator.EQUAL, value,
+				field2, FilterOperator.EQUAL, value2,
+				field3, FilterOperator.EQUAL, value3);
 	}
 	public <T extends Entity> List<T> fetchEntities(String type, String field, FilterOperator op, Object value,
 			String field2, FilterOperator op2, Object value2,
@@ -46,6 +64,9 @@ public class Querier {
 	}
 	
 
+	public Long countEntities(String type, String field, Object value){
+		return countEntities(type, field, FilterOperator.EQUAL, value);
+	}
 	public Long countEntities(String type, String field, FilterOperator op, Object value){
 		
 		Query q = getQuery(type).addFilter(field, op, value);
@@ -55,12 +76,23 @@ public class Querier {
 		
 		return result;
 	}
+	public Long countEntities(String type, String field, Object value,
+							  String field2, Object value2){
+		return countEntities(type, field, FilterOperator.EQUAL, value, field2, FilterOperator.EQUAL, value2);
+	}
 	public Long countEntities(String type, String field, FilterOperator op, Object value,
 			String field2, FilterOperator op2, Object value2){
 		
 		getQuery(type).addFilter(field2, op2, value2);
 		
 		return countEntities(type, field, op, value);
+	}
+	public Long countEntities(String type, String field, Object value,
+							  String field2, Object value2,
+							  String field3, Object value3){
+		return countEntities(type, field, FilterOperator.EQUAL, value,
+				field2, FilterOperator.EQUAL, value2,
+				field3, FilterOperator.EQUAL, value3);
 	}
 	public Long countEntities(String type, String field, FilterOperator op, Object value,
 			String field2, FilterOperator op2, Object value2,
