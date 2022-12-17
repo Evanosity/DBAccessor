@@ -52,6 +52,25 @@ public class Key {
 		return type + "(" + id + ")";
 	}
 
+	public static Key create(String type, String id){
+		return new Key(type, id);
+	}
+	public static Key create(String string){
+		int open = string.indexOf("(");
+		int close = string.indexOf(")");
+
+		if(open < 1 || close < 1)
+			return null;
+
+		String type = string.substring(0, open);
+		String id = string.substring(open + 1, close);
+
+		return create(type, id);
+	}
+	public static Key create(Document d){
+		return new Key(d);
+	}
+
 	@Override
 	public boolean equals(Object o){
 		if(o instanceof Key newKey){

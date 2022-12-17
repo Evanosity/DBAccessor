@@ -177,12 +177,12 @@ public abstract class Entity implements Cloneable {
 	}
 
 	protected Map<String, Key> getStringKeyMapValue(String key){
-		Map<String, String> raw = getStringStringMapValue(key);
+		Map<String, Object> raw = getMapValue(key);
 
 		Map<String, Key> result = new HashMap<>();
 
 		for(var entry : raw.entrySet())
-			result.put(entry.getKey(), db.getKeyFromString(entry.getValue()));
+			result.put(entry.getKey(), db.getKeyFromDoc((Document) entry.getValue()));
 
 		return result;
 	}

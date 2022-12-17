@@ -2,7 +2,7 @@ package ca.elixa.db;
 
 import java.util.Set;
 
-import ca.elixa.classpool.ClassPool;
+import ca.elixa.classpool.ClassPoolString;
 import ca.elixa.classpool.GroupedClassPool;
 import org.bson.Document;
 
@@ -15,10 +15,10 @@ import org.bson.Document;
  */
 public class EntityFactory {
 
-	public final ClassPool<? extends Entity> pool;
+	public final ClassPoolString<? extends Entity> pool;
 
 	public EntityFactory(String path){
-		pool = new ClassPool<>(path, Entity.class);
+		pool = new ClassPoolString<>(path, Entity.class);
 	}
 
 	public EntityFactory(String... paths){
@@ -26,7 +26,7 @@ public class EntityFactory {
 		GroupedClassPool<Entity> gPool = new GroupedClassPool<>(Entity.class);
 
 		for(String path : paths){
-			ClassPool<Entity> p = new ClassPool<>(path, Entity.class);
+			ClassPoolString<Entity> p = new ClassPoolString<>(path, Entity.class);
 			gPool.addPool(p);
 		}
 
