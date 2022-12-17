@@ -135,10 +135,16 @@ public class BsonService {
         if(obj instanceof Map){
             Map<String, ?> casted = (Map<String, ?>) obj;
 
+
+
             Document doc = new Document();
 
-            for(var entry : casted.entrySet())
-                doc.put(entry.getKey(), entry.getValue());
+            for(var entry : casted.entrySet()) {
+
+                Object parsed = parseValue(entry.getValue());
+
+                doc.put(entry.getKey(), parsed);
+            }
 
             return doc;
         }
