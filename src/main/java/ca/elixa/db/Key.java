@@ -31,7 +31,7 @@ public class Key {
 	 * Turns this into a document; this is to store it on another document.
 	 * @return the composed BSON document
 	 */
-	protected Document toDocument() {
+	public Document toDocument() {
 		Document result = new Document();
 		
 		result.put("type", type);

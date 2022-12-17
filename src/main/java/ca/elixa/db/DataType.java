@@ -7,8 +7,11 @@ public enum DataType {
 
     Key, KeyList,
 
-    //TO IMPLEMENT PROPERLY
-    StringKeyMap, StringStringMap,
+    //Maps
+    StringKeyMap,
+    StringStringMap,
+    StringNumberMap,
+    StringDecimalMap,
 
     EmbeddedEntity, EmbeddedEntityList
 }

@@ -121,10 +121,14 @@ public class DBService{
 		return Key.create(raw);
 	}
 
+	@Deprecated
 	public Key getKeyFromDoc(Document doc){
+		if(doc == null)
+			return null;
 		return new Key(doc);
 	}
 
+	@Deprecated
 	public Key getKey(String type, String id) {
 		return new Key(type, id);
 	}
@@ -518,6 +522,8 @@ public class DBService{
 		Map<String, List<Key>> result = new HashMap<>();
 		
 		for(Key key : keys) {
+			if(key == null)
+				continue;
 			String type = key.getType();
 			
 			List<Key> current = result.get(type);
