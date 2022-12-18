@@ -210,6 +210,19 @@ public abstract class Entity implements Cloneable {
 		return result;
 	}
 
+	protected Map<String, Double> getStringDoubleMapValue(String key){
+		Document doc = raw.get(key, Document.class);
+
+		Map<String, Double> result = new HashMap<>();
+
+		if(doc == null)
+			return result;
+
+		for(var entry : doc.entrySet())
+			result.put(entry.getKey(), Double.valueOf(entry.getValue().toString()));
+
+		return result;	}
+
 	/**
 	 * Fetch a list of embedded entities on this entity.
 	 * @param key - the given property

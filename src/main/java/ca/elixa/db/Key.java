@@ -52,6 +52,12 @@ public class Key {
 		return type + "(" + id + ")";
 	}
 
+	/**
+	 * Create
+	 * @param type
+	 * @param id
+	 * @return
+	 */
 	public static Key create(String type, String id){
 		return new Key(type, id);
 	}
