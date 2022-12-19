@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import ca.elixa.iris.Iris;
 import com.mongodb.client.*;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -222,12 +223,13 @@ public class DBService{
 		//TODO consider a put event handler
 		
 		if(ent.projected()) {
-			//TODO log that we can't save projected entities.
+			Iris.warning("Attempted to save projected entity of key");
 			return;
 		}
 
-		System.out.println("SAVING ENTITY " + ent.getId() + " of type " + ent.getType() + " of name " + ent.getName());
-		
+		Iris.debug("SAVING ENTITY " + ent.getId() + " of type " + ent.getType() + " of name " + ent.getName());
+
+
 		if(ent.isNew())
 			col.insertOne(session, ent.raw);
 		else
@@ -416,6 +418,19 @@ public class DBService{
 	}
 
 	/**
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
 	 * queries
 	 */
 	public <T extends Entity> List<T> runEntityQuery(Query q){
