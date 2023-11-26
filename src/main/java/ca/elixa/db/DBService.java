@@ -329,6 +329,10 @@ public class DBService{
 		
 		return result;
 	}
+
+	public <T extends Entity> T getEntity(String type, String id){
+		return getEntity(new Key(type, id));
+	}
 	
 	/**
 	 * Fetch a single entity from a key.

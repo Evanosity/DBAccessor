@@ -146,6 +146,10 @@ public abstract class Entity implements Cloneable {
 		return raw.getDate(key);
 	}
 
+	protected Boolean getBooleanValue(String key){
+		return raw.getBoolean(key);
+	}
+
 	protected Long getLongValue(String key){
 		Long result = raw.getLong(key);
 		if(result == null)
