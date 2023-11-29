@@ -234,7 +234,7 @@ public abstract class Entity implements Cloneable {
 	 * @return
 	 * @param <T> - the resulting entity type
 	 */
-	protected <T extends Entity> List<T> getEmbeddedEntityList(String key, String type){
+	public <T extends Entity> List<T> getEmbeddedEntityList(String key, String type){
 		List<Document> documents = getListValue(key, Document.class);
 		List<T> result = new ArrayList<>();
 

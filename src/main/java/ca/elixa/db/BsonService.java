@@ -1,5 +1,6 @@
 package ca.elixa.db;
 
+import ca.elixa.iris.Iris;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
@@ -66,8 +67,11 @@ public class BsonService {
 
         List<Bson> builtFilters = new ArrayList<>();
 
-        for(Map.Entry<String, Pair<FilterOperator, Object>> entry : filters.entrySet()) {
+        //iterate over all the filters
+        for(var entry : filters.entrySet()) {
             String type = entry.getKey();
+
+
             Pair<FilterOperator, Object> rawFilter = entry.getValue();
 
             //Ensure that we parse keys into documents
@@ -77,7 +81,8 @@ public class BsonService {
         }
 
         //Compose the final filter.
-        return Filters.and(builtFilters.toArray(new Bson[builtFilters.size()]));
+        return Filters.and(builtFilters);
+        //return Filters.and(builtFilters.toArray(new Bson[builtFilters.size()]));
     }
 
     /**
