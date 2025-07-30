@@ -5,6 +5,8 @@ public enum DataType {
 
     Number, Decimal,
 
+    Boolean,
+
     Key, KeyList,
 
     //Maps
