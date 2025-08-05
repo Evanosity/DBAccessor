@@ -53,6 +53,8 @@ public abstract class Entity implements Cloneable {
 		else {
 			this.key = new Key(getType(), raw.getObjectId("_id").toHexString());
 		}
+
+		setCreatedDate(new Date());
 	}
 	
 	/**
@@ -382,6 +384,13 @@ public abstract class Entity implements Cloneable {
 	 */
 	public void iterateOverAllProperties(Consumer<? super Entry<String, Object>> transformation){
 		Collections.unmodifiableCollection(raw.entrySet()).forEach(transformation);
+	}
+
+	private void setCreatedDate(Date d){
+		setValue("createdDate", d);
+	}
+	public final Date getCreatedDate(){
+		return getDateValue("createdDate");
 	}
 
 	/**
