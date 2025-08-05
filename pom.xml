@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
-            <version>4.9.0</version>
+            <version>5.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
@@ -27,6 +27,12 @@
         <dependency>
             <groupId>ca.elixa</groupId>
             <artifactId>ClassPool</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.elixa</groupId>
+            <artifactId>Iris</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
