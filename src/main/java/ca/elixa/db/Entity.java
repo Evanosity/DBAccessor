@@ -227,7 +227,8 @@ public abstract class Entity implements Cloneable {
 		for(var entry : doc.entrySet())
 			result.put(entry.getKey(), Double.valueOf(entry.getValue().toString()));
 
-		return result;	}
+		return result;
+	}
 
 	/**
 	 * Fetch a list of embedded entities on this entity.
@@ -323,7 +324,7 @@ public abstract class Entity implements Cloneable {
 	 * @param key - the property we are setting
 	 * @param value - the new value
 	 */
-	public void setValue(String key, Object value) {
+	protected void setValue(String key, Object value) {
 		raw.put(key, BsonService.parseValue(value));
 	}
 
