@@ -236,7 +236,7 @@ public class DBService{
 			col.replaceOne(session, BsonService.getFilterForId(ent.getId()), ent.raw);
 	}
 	
-	public void deleteEntity(Entity ent) {		
+	public <T extends Entity> void deleteEntity(T ent) {
 		delete(ent.getKey());
 	}
 	
@@ -244,7 +244,7 @@ public class DBService{
 	 * Delete entities from the DB. This is the same as deleteEntity(Iterable)
 	 * @param entities
 	 */
-	public void deleteEntity(Entity...entities) {
+	public <T extends Entity> void deleteEntity(T...entities) {
 		deleteEntity(Arrays.asList(entities));
 	}
 	
@@ -252,7 +252,7 @@ public class DBService{
 	 * Delete entities from the DB.
 	 * @param entities
 	 */
-	public void deleteEntity(Iterable<Entity> entities) {
+	public <T extends Entity> void deleteEntity(Iterable<T> entities) {
 		List<Key> keys = getKeysFromEntities(entities);
 		
 		delete(keys);
@@ -440,7 +440,16 @@ public class DBService{
 	public <T extends Entity> List<T> runEntityQuery(Query q){
 		Bson filter = BsonService.generateCompositeFilter(q.filters);
 
+		//Iris.debug("---Running query---");
+		//Iris.debug(filter.toString());
+
 		return fetchInternal(q.getType(), filter, q.projections);
+	}
+
+	public void runDeleteQuery(Query... queries){
+		for(Query qx : queries){
+			runDeleteQuery(qx);
+		}
 	}
 
 	public void runDeleteQuery(Query q) {
@@ -486,7 +495,7 @@ public class DBService{
 	 * @param entities
 	 * @return
 	 */
-	public List<Key> getKeysFromEntities(Iterable<Entity> entities){
+	public <T extends Entity> List<Key> getKeysFromEntities(Iterable<T> entities){
 		List<Key> result = new ArrayList<>();
 		
 		for(Entity ent : entities)
