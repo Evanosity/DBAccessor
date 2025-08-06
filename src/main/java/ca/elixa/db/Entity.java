@@ -324,7 +324,7 @@ public abstract class Entity implements Cloneable {
 	 * @param key - the property we are setting
 	 * @param value - the new value
 	 */
-	protected void setValue(String key, Object value) {
+	public void setValue(String key, Object value) {
 		raw.put(key, BsonService.parseValue(value));
 	}
 
