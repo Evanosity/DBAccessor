@@ -48,13 +48,13 @@ public abstract class Entity implements Cloneable {
 		if(isNew) {
 			this.key = db.generateKey(getType());
 			raw.put("_id", new ObjectId(key.getId()));
+			setCreatedDate(new Date());
 		}
 		//otherwise, create the key out of the type and ID.
 		else {
 			this.key = new Key(getType(), raw.getObjectId("_id").toHexString());
 		}
 
-		setCreatedDate(new Date());
 	}
 	
 	/**
