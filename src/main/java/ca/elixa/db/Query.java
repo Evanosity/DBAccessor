@@ -71,6 +71,10 @@ public class Query {
 	public Set<String> getProjections(){
 		return projections;
 	}
+
+	public Query addFilter(String propertyName, Object value){
+		return addFilter(propertyName, FilterOperator.EQUAL, value);
+	}
 	
 	/**
 	 * 
