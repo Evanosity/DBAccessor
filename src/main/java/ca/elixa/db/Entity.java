@@ -3,6 +3,7 @@ package ca.elixa.db;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.bson.Document;
 import org.bson.types.Binary;
@@ -203,29 +204,27 @@ public abstract class Entity implements Cloneable {
 	 * @return
 	 */
 	protected Map<String, String> getStringStringMapValue(String key){
-		Document doc = raw.get(key, Document.class);
-
-		Map<String, String> result = new HashMap<>();
-
-		if(doc == null)
-			return result;
-
-		for(var entry : doc.entrySet())
-			result.put(entry.getKey(), entry.getValue().toString());
-
-		return result;
+		return getMapValue(key, x -> x.toString());
 	}
 
 	protected Map<String, Double> getStringDoubleMapValue(String key){
+		return getMapValue(key, x -> Double.valueOf(x.toString()));
+	}
+
+	protected Map<String, Long> getStringLongMapValue(String key){
+		return getMapValue(key, x -> Long.valueOf(x.toString()));
+	}
+
+	private <T> Map<String, T> getMapValue(String key, Function<Object, T> func){
 		Document doc = raw.get(key, Document.class);
 
-		Map<String, Double> result = new HashMap<>();
+		Map<String, T> result = new HashMap<>();
 
-		if(doc == null)
+		if (doc == null)
 			return result;
 
 		for(var entry : doc.entrySet())
-			result.put(entry.getKey(), Double.valueOf(entry.getValue().toString()));
+			result.put(entry.getKey(), func.apply(entry.getValue()));
 
 		return result;
 	}
