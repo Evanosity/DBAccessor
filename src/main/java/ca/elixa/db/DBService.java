@@ -41,6 +41,7 @@ public class DBService{
 		this.client = client;
 		session = client.startSession();
 		db = client.getDatabase(getDBName());
+
 	}
 
 	//TODO this is probably an environment variable
@@ -57,9 +58,9 @@ public class DBService{
 	 */
 	public boolean doTransaction(Runnable action) {
 
-		//action.run();
+		action.run();
 
-		//return true;
+		return true;
 
 		//try{
 		//	return true;
@@ -69,7 +70,7 @@ public class DBService{
 		//	return false;
 		//}
 
-
+		/*
         //TODO consider transactionOptions
         return session.withTransaction(() -> {
             try {
@@ -78,11 +79,11 @@ public class DBService{
             }
             //if any error occurs, we simply report back. Might be worth throwing E instead? TODO
             catch(Exception e) {
-                throw e;
+                return false;
             }
         });
 
-
+		 */
 	}
 
 	public Long test(){
