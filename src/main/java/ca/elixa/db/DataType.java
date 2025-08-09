@@ -7,6 +7,8 @@ public enum DataType {
 
     Boolean,
 
+    Date,
+
     Key, KeyList,
 
     //Maps
