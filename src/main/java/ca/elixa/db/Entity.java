@@ -150,6 +150,12 @@ public abstract class Entity implements Cloneable {
 	}
 
 	protected Boolean getBooleanValue(String key){
+
+		Boolean result = raw.getBoolean(key);
+
+		if(result == null)
+			return false;
+
 		return raw.getBoolean(key);
 	}
 
