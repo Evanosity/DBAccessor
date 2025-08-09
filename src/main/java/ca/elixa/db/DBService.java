@@ -48,6 +48,27 @@ public class DBService{
 		return "gfl-test";
 	}
 
+	private boolean tx = false;
+
+	public boolean txInProgress(){
+		return tx;
+	}
+
+	public void startTransaction(){
+		session.startTransaction();
+		tx = true;
+	}
+
+	public void endTransaction(){
+		tx = false;
+		try{
+			session.commitTransaction();
+		}
+		catch(Exception e){
+			throw e;
+		}
+	}
+
 	/**
 	 * Perform an action inside of a mongodb transaction.
 	 * This isn't ThreadSafe
