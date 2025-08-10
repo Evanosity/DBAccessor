@@ -302,15 +302,17 @@ public class DBService{
 	 * Delete a collection of entities by their key.
 	 * @param keys
 	 */
-	public void delete(Iterable<Key> keys) {
-		
-		Map<String, List<Key>> sorted = sortKeysByType(keys);
-		
-		for(Entry<String, List<Key>> entry : sorted.entrySet()) {
-			MongoCollection<Document> col = db.getCollection(entry.getKey());
-			
-			for(Key key : entry.getValue())
-				deleteInternal(key, col);
+	public void delete(Iterable<Key>... keys) {
+
+		for(var v : keys){
+			Map<String, List<Key>> sorted = sortKeysByType(v);
+
+			for(Entry<String, List<Key>> entry : sorted.entrySet()) {
+				MongoCollection<Document> col = db.getCollection(entry.getKey());
+
+				for(Key key : entry.getValue())
+					deleteInternal(key, col);
+			}
 		}
 	}
 	
