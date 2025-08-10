@@ -192,6 +192,7 @@ public class DBService{
 	 * Same as calling put(Iterable<Entity>)
 	 * @param entities
 	 */
+
 	public void put(Entity...entities ) {
 		put(Arrays.asList(entities));
 	}
@@ -200,14 +201,17 @@ public class DBService{
 	 * Insert a list of entities into the database
 	 * @param ents
 	 */
-	public <T extends Entity> void put(Iterable<T> ents) {
-		Map<String, List<T>> sorted = sortEntitiesByType(ents);
-		
-		for(Entry<String, List<T>> entry : sorted.entrySet()) {
-			MongoCollection<Document> col = db.getCollection(entry.getKey());
-						
-			for(Entity ent : entry.getValue())
-				putInternal(ent, col);
+	public <T extends Entity> void put(Iterable<T>... ents) {
+
+		for(var v : ents){
+			Map<String, List<T>> sorted = sortEntitiesByType(v);
+
+			for(Entry<String, List<T>> entry : sorted.entrySet()) {
+				MongoCollection<Document> col = db.getCollection(entry.getKey());
+
+				for(Entity ent : entry.getValue())
+					putInternal(ent, col);
+			}
 		}
 	}
 
