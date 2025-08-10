@@ -59,7 +59,7 @@ public class DBService{
 		tx = true;
 	}
 
-	public void endTransaction(){
+	public void commitTransaction(){
 		tx = false;
 		try{
 			session.commitTransaction();
