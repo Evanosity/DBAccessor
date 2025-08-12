@@ -131,7 +131,7 @@ public class DBService{
 			result.put("Visits", value);
 			result.put("NewValue", value);
 
-			System.out.println(value);
+			//System.out.println(value);
 
 			MongoCollection<Document> col = db.getCollection("test");
 			col.replaceOne(filter, result);
@@ -256,7 +256,7 @@ public class DBService{
 			return;
 		}
 
-		Iris.debug("SAVING ENTITY " + ent.getId() + " of type " + ent.getType() + " of name " + ent.getName());
+		//Iris.debug("SAVING ENTITY " + ent.getId() + " of type " + ent.getType() + " of name " + ent.getName());
 
 
 		if(ent.isNew())
