@@ -43,9 +43,10 @@ public class DBService{
 		db = client.getDatabase(getDBName());
 	}
 
-	public void stop(){
-		client.close();
-	}
+	//bad, because we use a single clientsession for the entire gig (which is perhaps unwise)
+	//public void stop(){
+	//	client.close();
+	//}
 
 	//TODO this is probably an environment variable
 	protected String getDBName() {
