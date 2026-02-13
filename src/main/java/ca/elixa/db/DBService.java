@@ -74,6 +74,16 @@ public class DBService{
 		}
 	}
 
+	public void abortTransaction(){
+		tx = false;
+		try{
+			session.abortTransaction();
+		}
+		catch(Exception e){
+			throw e;
+		}
+	}
+
 	/**
 	 * Perform an action inside of a mongodb transaction.
 	 * This isn't ThreadSafe
