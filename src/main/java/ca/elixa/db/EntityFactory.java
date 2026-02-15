@@ -23,7 +23,7 @@ public class EntityFactory {
 
 	public EntityFactory(String... paths){
 
-		GroupedClassPool<Entity> gPool = new GroupedClassPool<>(Entity.class);
+		GroupedClassPool<Entity> gPool = new GroupedClassPool<>("ca.elixa", Entity.class);
 
 		for(String path : paths){
 			ClassPoolString<Entity> p = new ClassPoolString<>(path, Entity.class);
