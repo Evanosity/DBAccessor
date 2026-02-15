@@ -12,18 +12,19 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-core</artifactId>
-            <version>4.3.1</version>
+            <version>5.0.7</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
-            <version>5.2.0</version>
+            <version>5.6.2</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-async</artifactId>
             <version>3.12.11</version>
         </dependency>
+
         <dependency>
             <groupId>ca.elixa</groupId>
             <artifactId>ClassPool</artifactId>
